@@ -16,21 +16,22 @@ for tr in soup.find_all('tr', class_='mtx'):
     if len(td_list) >= 3:
         time_values = td_list[0].text.strip()
         temperature_values = td_list[2].text.strip()
-        temperature_data.append({'time': time_values, 'temperature': temperature_values})
+        sunshine_hours_values = td_list[8].text.strip()
+        temperature_data.append({'time': time_values, 'temperature': temperature_values, 'sunshine_hour': sunshine_hours_values})
 
 for item  in temperature_data:
-    print(f"Time: {item['time']}, Temperature: {item['temperature']}")
+    print(f"Time: {item['time']}, Temperature: {item['temperature']}, Sunshine_hours: {item['sunshine_hour']}")
 
 import sqlite3
 
 con = sqlite3.connect('google_database.db')
 cur = con.cursor()
 
-sql_createtable_DSp = 'CREATE TABLE IF NOT EXISTS sql_DS (time TEXT, temperature TEXT)'
+sql_createtable_DSp = 'CREATE TABLE IF NOT EXISTS sql_DS (time TEXT, temperature TEXT, sunshine_hour TEXT)'
 cur.execute(sql_createtable_DSp)
 
 for item in temperature_data:
-    cur.execute('INSERT INTO sql_DS (time, temperature) VALUES (?, ?)', (item['time'], item['temperature']))
+    cur.execute('INSERT INTO sql_DS (time, temperature, sunshine_hour) VALUES (?, ?, ?)', (item['time'], item['temperature'], item['sunshine_hour']))
 
 con.commit()
 
