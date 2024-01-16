@@ -17,21 +17,21 @@ for tr in soup.find_all('tr', class_='mtx'):
         time_values = td_list[0].text.strip()
         temperature_values = td_list[2].text.strip()
         sunshine_hours_values = td_list[8].text.strip()
-        temperature_data.append({'time': time_values, 'temperature': temperature_values, 'sunshine_hour': sunshine_hours_values})
+        temperature_data.append({'time': time_values, 'temperature_open': temperature_values, 'sunshine_hour': sunshine_hours_values})
 
 for item  in temperature_data:
-    print(f"Time: {item['time']}, Temperature: {item['temperature']}, Sunshine_hours: {item['sunshine_hour']}")
+    print(f"Time: {item['time']}, Temperature_open: {item['temperature_open']}, Sunshine_hours: {item['sunshine_hour']}")
 
 import sqlite3
 
 con = sqlite3.connect('google_database.db')
 cur = con.cursor()
 
-sql_createtable_DSp = 'CREATE TABLE IF NOT EXISTS sql_DS (time TEXT, temperature TEXT, sunshine_hour TEXT)'
+sql_createtable_DSp = 'CREATE TABLE IF NOT EXISTS sql_DS (time TEXT, temperature_open TEXT, sunshine_hour TEXT)'
 cur.execute(sql_createtable_DSp)
 
 for item in temperature_data:
-    cur.execute('INSERT INTO sql_DS (time, temperature, sunshine_hour) VALUES (?, ?, ?)', (item['time'], item['temperature'], item['sunshine_hour']))
+    cur.execute('INSERT INTO sql_DS (time, temperature_open, sunshine_hour) VALUES (?, ?, ?)', (item['time'], item['temperature_open'], item['sunshine_hour']))
 
 con.commit()
 
